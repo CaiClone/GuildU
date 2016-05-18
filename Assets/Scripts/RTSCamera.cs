@@ -5,7 +5,7 @@ public class RTSCamera : MonoBehaviour {
     private float _treshold;
     private float _speed;
     //FIXME
-    private Rect _bounds = new Rect(-10, -10, 20, 20);
+    private Rect _bounds = new Rect(-20, -20, 40, 40);
     public Options options;
 	void Start () {
         _treshold = options.CameraTreshold;
@@ -28,10 +28,11 @@ public class RTSCamera : MonoBehaviour {
         else if (transform.position.x > _bounds.xMax && movement.x == 1) movement.x = 0;
         if (transform.position.y < _bounds.yMin && movement.y == -1) movement.y = 0;
         else if (transform.position.y > _bounds.yMax && movement.y == 1) movement.y = 0;
-        Move(movement.normalized * _speed);
+        movement = Camera.main.transform.TransformDirection(movement);
+        Move(movement.normalized * _speed* Time.deltaTime);
     }
     void Move(Vector2 vec)
     {
-        transform.Translate(new Vector3(vec.x, vec.y,0));
+        transform.Translate(transform.right* vec.x + Vector3.forward * vec.y,Space.World);
     }
 }
